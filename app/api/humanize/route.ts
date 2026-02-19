@@ -76,7 +76,7 @@ Make it read smoothly, retain the original meaning completely, but sound highly 
 </SYSTEM_INSTRUCTIONS>
 `;
 
-        // We use gemini-1.5-flash for speed and large context windows (up to 1M tokens)
+        // We use gemini-1.5-flash for speed and large context windows (1M+ tokens)
         const model = genAI.getGenerativeModel({
             model: "gemini-1.5-flash",
             systemInstruction: systemPrompt,
