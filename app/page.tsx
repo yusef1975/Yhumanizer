@@ -10,17 +10,21 @@ export default function Home() {
   const [persona, setPersona] = useState("College");
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPiiWarning, setShowPiiWarning] = useState(false);
 
-  const handleRefine = async () => {
-    if (!inputText.trim()) return;
+  const containsPII = (text: string) => {
+    // Basic email regex
+    const emailRegex = /[\w.-]+@[\w.-]+\.\w+/;
+    // Basic phone number regex (matches formats like 123-456-7890, (123) 456-7890, etc.)
+    const phoneRegex = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/;
 
-    if (inputText.length > 60000) {
-      setError("Input exceeds maximum limit of 60,000 characters (approx 15k tokens).");
-      return;
-    }
+    return emailRegex.test(text) || phoneRegex.test(text);
+  };
 
+  const processSubmission = async () => {
     setIsProcessing(true);
     setError(null);
+    setShowPiiWarning(false);
 
     try {
       const res = await fetch("/api/humanize", {
@@ -46,6 +50,22 @@ export default function Home() {
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleRefine = () => {
+    if (!inputText.trim()) return;
+
+    if (inputText.length > 60000) {
+      setError("Input exceeds maximum limit of 60,000 characters (approx 15k tokens).");
+      return;
+    }
+
+    if (containsPII(inputText) && !showPiiWarning) {
+      setShowPiiWarning(true);
+      return;
+    }
+
+    processSubmission();
   };
 
   const handleDownloadDocx = async () => {
@@ -141,6 +161,32 @@ export default function Home() {
           {error && (
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm text-center">
               {error}
+            </div>
+          )}
+
+          {showPiiWarning && (
+            <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl flex flex-col gap-3 transition-all animate-in fade-in zoom-in-95 duration-200">
+              <div className="flex items-start gap-3 text-yellow-500 text-sm">
+                <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <div className="flex-1">
+                  <h3 className="font-bold text-yellow-400 mb-1">Potential PII Detected</h3>
+                  <p className="text-yellow-500/80 leading-relaxed mb-3">We detected an email address or phone number in your text. We recommend removing personal information before sending it to the AI.</p>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setShowPiiWarning(false)}
+                      className="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-md text-xs font-semibold transition-colors"
+                    >
+                      Wait, let me edit
+                    </button>
+                    <button
+                      onClick={processSubmission}
+                      className="px-3 py-1.5 bg-yellow-600/20 hover:bg-yellow-600/40 text-yellow-400 rounded-md text-xs font-semibold transition-colors"
+                    >
+                      Ignore and proceed
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
