@@ -76,9 +76,9 @@ Make it read smoothly, retain the original meaning completely, but sound highly 
 </SYSTEM_INSTRUCTIONS>
 `;
 
-        // We use gemini-1.5-flash for speed and large context windows (1M+ tokens)
+        // gemini-1.5-flash was retired April 2025. gemini-2.5-flash is its successor.
         const model = genAI.getGenerativeModel({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-flash",
             systemInstruction: systemPrompt,
         });
 
