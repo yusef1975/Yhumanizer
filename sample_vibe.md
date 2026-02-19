@@ -1,0 +1,1 @@
+Generally Speaking, the general theme of this involved mixture is a indication to the author's creativity. Afterwards, we must examine into the characters. Also, the protagonist acts as a prime example of hope. For That Reason, the conclusion is inevitable.
