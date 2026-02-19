@@ -11,10 +11,10 @@ export default function Home() {
 
   const handleRefine = async () => {
     if (!inputText.trim()) return;
-    
+
     setIsProcessing(true);
     setError(null);
-    
+
     try {
       const res = await fetch("/api/humanize", {
         method: "POST",
@@ -26,13 +26,13 @@ export default function Home() {
           persona: persona,
         }),
       });
-      
+
       const data = await res.json();
-      
+
       if (!res.ok) {
         throw new Error(data.error || "Failed to process text");
       }
-      
+
       setOutputText(data.humanized);
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred");
@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col pt-24 hover:pt-24">
-      {/* Header *\/ }
+      {/* Header */}
       <div className="text-center mb-12 space-y-4">
         <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 drop-shadow-sm">
           StudentVibe
@@ -54,7 +54,7 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col xl:flex-row gap-8 items-start w-full">
-        {/* Left Column: Input *\/ }
+        {/* Left Column: Input */}
         <div className="w-full xl:w-1/2 flex flex-col gap-6">
           <div className="glass-panel p-6 flex flex-col h-[500px] transition-all duration-300 hover:border-white/20">
             <div className="flex justify-between items-center mb-4">
@@ -64,18 +64,17 @@ export default function Home() {
                   <button
                     key={p}
                     onClick={() => setPersona(p)}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 ${
-                      persona === p
+                    className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 ${persona === p
                         ? "bg-white/10 text-white shadow-sm"
                         : "text-white/40 hover:text-white/70 hover:bg-white/5"
-                    }`}
+                      }`}
                   >
                     {p}
                   </button>
                 ))}
               </div>
             </div>
-            
+
             <textarea
               className="flex-1 w-full bg-transparent border-none text-white/90 placeholder:text-white/20 resize-none focus:ring-0 focus:outline-none text-base leading-relaxed"
               placeholder="Paste the overly formal AI text here..."
@@ -83,7 +82,7 @@ export default function Home() {
               onChange={(e) => setInputText(e.target.value)}
             />
           </div>
-          
+
           <button
             onClick={handleRefine}
             disabled={isProcessing || !inputText.trim()}
@@ -99,7 +98,7 @@ export default function Home() {
               )}
             </span>
           </button>
-          
+
           {error && (
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm text-center">
               {error}
@@ -107,12 +106,12 @@ export default function Home() {
           )}
         </div>
 
-        {/* Right Column: Output *\/ }
+        {/* Right Column: Output */}
         <div className="w-full xl:w-1/2 flex flex-col gap-6">
           <div className="glass-panel p-6 flex flex-col h-[500px] relative overflow-hidden group transition-all duration-300 hover:border-white/20">
-            {/* Subtle glow effect behind the output *\/ }
+            {/* Subtle glow effect behind the output */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-indigo-500/5 blur-[100px] rounded-full pointer-events-none transition-all group-hover:bg-indigo-500/10"></div>
-            
+
             <div className="flex justify-between items-center mb-4 relative z-10">
               <h2 className="text-sm font-semibold uppercase tracking-wider text-green-400/90">Humanized Output</h2>
               {outputText && (
@@ -125,7 +124,7 @@ export default function Home() {
                 </button>
               )}
             </div>
-            
+
             <div className="flex-1 w-full text-white/90 text-base leading-relaxed overflow-y-auto relative z-10 whitespace-pre-wrap">
               {outputText ? (
                 outputText
