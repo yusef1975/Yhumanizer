@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         if (ratelimit) {
             // cf-connecting-ip guarantees Cloudflare's true client IP is passed through
             const ip = req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for") || "127.0.0.1";
-            const { success, pending, limit, reset, remaining } = await ratelimit.limit(ip);
+            const { success, limit, remaining } = await ratelimit.limit(ip);
 
             if (!success) {
                 return NextResponse.json(

@@ -219,7 +219,7 @@ export default function Home() {
               )}
             </div>
 
-            <div className="flex-1 w-full text-white/90 text-base leading-relaxed overflow-y-auto relative z-10 w-full pr-2">
+            <div className="flex-1 w-full text-white/90 text-base leading-relaxed overflow-y-auto relative z-10 pr-2">
               {outputText ? (
                 <ReactMarkdown
                   components={{
